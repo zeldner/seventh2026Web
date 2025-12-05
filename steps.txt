@@ -1,0 +1,36 @@
+npm create vite@latest agent-v4 -- --template react
+cd agent-v4
+npm install
+install tailwind : 
+    npm install tailwindcss@next @tailwindcss/vite@next
+    in index.css :
+         delete everything
+         Add this one single line : @import "tailwindcss";
+    in vite.config.js :
+        import tailwindcss from '@tailwindcss/vite'
+         plugins: [react(), tailwindcss()],
+
+Install the AI SDK : 
+    npm install @google/generative-ai
+
+    Get the Real Key
+        Go to Google AI Studio (aistudio.google.com).
+            https://aistudio.google.com/app/api-keys
+        Click the blue "Get API key" button.
+        Click "Create API key".
+        Copy the long code that starts with AIza...
+
+    npm install react-markdown
+    
+    if npm install react react-dom && npm run dev -- --force
+
+    We will build a React app that uses two different brains automatically:
+
+        The Examiner (Gemini Flash): Fast, unlimited. It handles the back-and-forth questioning.
+
+        The Coach (Gemini Pro): Deep, limited. It runs only when the exam ends to analyze the "Strategy."
+
+We will use this specific instruction in our code:
+
+"Analyze the student's language for collaboration markers. Do they use 'We' instead of 'I'? Do they mention debating? 
+Do they explain why they chose an answer (Deep Strategy) or just guess (Shallow Strategy)?"
