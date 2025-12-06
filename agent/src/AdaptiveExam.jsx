@@ -1,7 +1,10 @@
-// Ilya Zeldner - Hybrid Examiner - Gemini 2.5 Flash + Pro
+// Ilya Zeldner
+// Hybrid Examiner - Gemini 2.5 Flash + Pro
 import { useState, useRef, useEffect } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
+// ENVIRONMENT VARIABLE
+// VITE_API_KEY in your .env file
 const API_KEY = import.meta.env.VITE_API_KEY;
 
 const AdaptiveExam = () => {
