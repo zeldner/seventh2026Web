@@ -28,20 +28,20 @@ function App() {
     // Clean up symbols (*, #) so it sounds natural
     const cleanText = textToSpeak.replace(/[*#`_]/g, "");
 
-    const utterance = new SpeechSynthesisUtterance(cleanText);
+    const utterance = new SpeechSynthesisUtterance(cleanText); // Create utterance
     utterance.lang = "en-US";
     utterance.rate = 1;
 
-    utterance.onstart = () => setIsSpeaking(true);
-    utterance.onend = () => setIsSpeaking(false);
-    utterance.onerror = () => setIsSpeaking(false);
+    utterance.onstart = () => setIsSpeaking(true); // Update state when speaking starts
+    utterance.onend = () => setIsSpeaking(false); // Update state when speaking ends
+    utterance.onerror = () => setIsSpeaking(false); // Update state on error
 
-    window.speechSynthesis.speak(utterance);
+    window.speechSynthesis.speak(utterance); // Start speaking
   };
 
   const stopSpeaking = () => {
-    window.speechSynthesis.cancel();
-    setIsSpeaking(false);
+    window.speechSynthesis.cancel(); // Stop speaking
+    setIsSpeaking(false); // Update state
   };
 
   // THE AI FUNCTION
@@ -52,9 +52,9 @@ function App() {
     // Don't clear response ,  so the screen doesn't jump
 
     try {
-      const result = await model.generateContent(task);
-      const text = result.response.text();
-      setResponse(text);
+      const result = await model.generateContent(task); // Generate AI response
+      const text = result.response.text(); // Extract text from response
+      setResponse(text); // Update response state
 
       // AUTO-SPEAK: Robot speaks immediately after thinking
       speakText(text);
@@ -71,22 +71,23 @@ function App() {
     if (isSpeaking) stopSpeaking();
 
     const SpeechRecognition =
-      window.SpeechRecognition || window.webkitSpeechRecognition;
+      window.SpeechRecognition || window.webkitSpeechRecognition; // Support for different browsers
+    // Alert if not supported
     if (!SpeechRecognition) {
       alert("Browser doesn't support speech.");
       return;
     }
 
-    const recognition = new SpeechRecognition();
+    const recognition = new SpeechRecognition(); // Create recognition instance
     recognition.lang = "en-US";
     recognition.interimResults = false;
 
-    recognition.onstart = () => setIsListening(true);
-    recognition.onend = () => setIsListening(false);
+    recognition.onstart = () => setIsListening(true); // Update state when listening starts
+    recognition.onend = () => setIsListening(false); // Update state when listening ends
 
     recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
-      setTask((prev) => prev + " " + transcript);
+      const transcript = event.results[0][0].transcript; // Get the transcript from results
+      setTask((prev) => prev + " " + transcript); // Append to existing task
     };
 
     recognition.start();
