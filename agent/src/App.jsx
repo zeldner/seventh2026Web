@@ -4,6 +4,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import ReactMarkdown from "react-markdown"; // For rendering markdown
 
 // Initialize Google Generative AI
+// Make sure to set VITE_API_KEY in your .env file
 
 const API_KEY = import.meta.env.VITE_API_KEY;
 const genAI = new GoogleGenerativeAI(API_KEY); // Create the Generative AI client
