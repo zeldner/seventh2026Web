@@ -20,9 +20,64 @@ Install the AI SDK :
         Click "Create API key".
         Copy the long code that starts with AIza...
 
-    npm install react-markdown
+    npm install react-markdown 
+        is a popular React component that safely renders Markdown text strings into actual React elements, which the browser then displays as HTML. It allows developers to easily create text-heavy content like blogs, documentation, or product pages using the simpler Markdown syntax instead of writing extensive JSX tags.
     
     if npm install react react-dom && npm run dev -- --force
+
+ai urls : 
+    Go to the Source
+    ​: ai.google.dev.
+    ​Action: Go to ai.google.dev.
+    ​2. Find the "API Reference"
+    ​We are writing code, so we need the Reference manual.
+    ​Action: Look at the top menu bar. Click on API Reference.
+    ​3. Choose "REST" (The Raw Address)
+
+    ​Node.js / Python / Android: These are "Libraries" (SDKs). 
+    They wrap the code in easy functions like genAI.getGenerativeModel().
+
+    ​REST: This stands for "Representational State Transfer." 
+
+    This is the Raw URL version. 
+
+    If we want to know the actual address (https://...) that the library is calling behind the scenes, we must look at the REST documentation.
+
+    ​Action: Click the tab that says REST.
+
+    ​4. Find the Command (models.list)
+    ​On the left sidebar, we will see a list of everything the API can do. 
+    We want to see the models.
+    ​Action: Click models -> list.
+
+    ​5. Read the Definition
+    ​we will see a page that looks like this:
+    ​Method: models.list
+    Lists models available through the API.
+    ​HTTP request
+    GET https://generativelanguage.googleapis.com/v1beta/models
+    ​
+    ​The Method is GET (meaning "Fetch data").
+    ​The URL is https://generativelanguage.googleapis.com/v1beta/models.
+    ​Why did we add ?key=${API_KEY}?
+
+    ​The documentation tells us  that every request needs authentication. In the "Raw URL" world (REST), we pass your credentials by adding ?key=YOUR_KEY at the end of the address.
+
+    ​So the formula is:
+    ​Base Address: https://generativelanguage.googleapis.com
+    ​Version: /v1beta
+    ​Command: /models
+    ​Auth: ?key=YOUR_KEY
+    ​Result:
+    https://generativelanguage.googleapis.com/v1beta/models?key=YOUR_KEY
+
+    ​Whenever we use a new technology (like OpenAI, Spotify API, Weather API):
+    ​Search for "OFFICIAL NAME API Reference".
+    ​Look for the section called "Endpoints" or "REST".
+    ​That is where the URLs live.
+
+
+
 
     We will build a React app that uses two different brains automatically:
 
