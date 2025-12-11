@@ -25,26 +25,30 @@ const AdaptiveExam = () => {
   // This runs every time the 'history' or 'examState' changes
   useEffect(() => {
     if (bottomRef.current) {
-      bottomRef.current.scrollIntoView({ behavior: "smooth" });
+      bottomRef.current.scrollIntoView({ behavior: "smooth" }); // Smooth scroll to bottom
+      // when new messages are added
+      // This keeps the latest interaction in view
     }
-  }, [history, examState]);
+  }, [history, examState]); // Dependencies : history, examState
 
   // THE EXAMINER (2.5 Flash)
   const askTheExaminer = async (userAnswer = "") => {
     // Logic to handle start/thinking state
     if (userAnswer === "START_EXAM") {
-      setExamState("THINKING");
-      setHistory([]);
+      setExamState("THINKING"); // Set to thinking state
+      setHistory([]); // Clear previous history
     } else {
-      setExamState("THINKING");
+      setExamState("THINKING"); // Set to thinking state
     }
 
     try {
-      const genAI = new GoogleGenerativeAI(API_KEY);
+      const genAI = new GoogleGenerativeAI(API_KEY); // Initialize Generative AI
       const model = genAI.getGenerativeModel({
         model: "gemini-2.5-flash", // 🧠 FLASH MODEL
         generationConfig: { responseMimeType: "application/json" },
-      });
+      }); // Get the model instance
+
+      // Construct the prompt with context
 
       const prompt = `
         You are an Adaptive Calculus Examiner.
@@ -66,22 +70,23 @@ const AdaptiveExam = () => {
         }
       `;
 
-      const result = await model.generateContent(prompt);
-      const data = JSON.parse(result.response.text());
+      const result = await model.generateContent(prompt); // Generate AI response
+      const data = JSON.parse(result.response.text()); // Parse JSON response
 
       if (data.isExamOver) {
-        await generateGeniusReport(history, userAnswer);
+        await generateGeniusReport(history, userAnswer); // Generate final report
       } else {
-        setFeedback(data.botMessage);
-        setCurrentQuestion(data.nextQuestion);
+        setFeedback(data.botMessage); // Set feedback for the last answer
+        setCurrentQuestion(data.nextQuestion); // Update to next question
+        // Update history with user answer and bot message
         if (userAnswer !== "START_EXAM") {
           setHistory((prev) => [
             ...prev,
-            { role: "user", text: userAnswer },
-            { role: "model", text: data.botMessage },
-          ]);
+            { role: "user", text: userAnswer }, // Add user answer
+            { role: "model", text: data.botMessage }, // Add bot feedback
+          ]); // Add user answer and bot feedback to history
         }
-        setExamState("ACTIVE");
+        setExamState("ACTIVE"); // Back to active state
       }
     } catch (e) {
       console.error(e);
@@ -92,19 +97,19 @@ const AdaptiveExam = () => {
 
   // THE COACH (2.5 Pro)
   const generateGeniusReport = async (fullHistory, lastAnswer) => {
-    setExamState("ANALYZING");
+    setExamState("ANALYZING"); // Set to analyzing state
     try {
       const genAI = new GoogleGenerativeAI(API_KEY);
       const model = genAI.getGenerativeModel({
         model: "gemini-2.5-pro", // 🧠 GENIUS MODEL
-        generationConfig: { responseMimeType: "application/json" },
-      });
+        generationConfig: { responseMimeType: "application/json" }, // Request JSON response
+      }); // Get the model instance
 
       const prompt = `
         You are a Team Performance Coach. 
         Review this exam transcript: ${JSON.stringify([
           ...fullHistory,
-          { role: "user", text: lastAnswer },
+          { role: "user", text: lastAnswer }, // Include last answer
         ])}
 
         CRITICAL ANALYSIS TASK:
@@ -122,11 +127,11 @@ const AdaptiveExam = () => {
         }
       `;
 
-      const result = await model.generateContent(prompt);
-      const data = JSON.parse(result.response.text());
+      const result = await model.generateContent(prompt); // Generate AI response
+      const data = JSON.parse(result.response.text()); // Parse JSON response
 
-      setFinalReport(data);
-      setExamState("FINISHED");
+      setFinalReport(data); // Set the final report state
+      setExamState("FINISHED"); // Set exam state to finished
     } catch (e) {
       console.error(e);
       setFeedback("Error generating report");
